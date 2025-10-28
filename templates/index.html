@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Heart Disease Prediction</title>
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Custom CSS -->
+    <style>
+        body {
+            background: linear-gradient(135deg, #e0f7fa, #80deea); /* Gradient nền y tế */
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+        .container {
+            max-width: 700px;
+            background: #ffffff;
+            padding: 30px;
+            border-radius: 12px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+            margin: 20px;
+        }
+        .form-label {
+            font-weight: 600;
+            color: #1e3a8a; /* Màu xanh đậm y tế */
+        }
+        .form-select, .form-control {
+            border: 2px solid #e0e7ff;
+            border-radius: 8px;
+        }
+        .form-select:focus, .form-control:focus {
+            border-color: #3b82f6;
+            box-shadow: 0 0 5px rgba(59, 130, 246, 0.5);
+        }
+        .btn-primary {
+            background-color: #2563eb;
+            border: none;
+            padding: 12px;
+            font-size: 1.1rem;
+            border-radius: 8px;
+            transition: background-color 0.3s;
+        }
+        .btn-primary:hover {
+            background-color: #1e40af;
+        }
+        .result-box {
+            margin-top: 20px;
+            padding: 15px;
+            border-radius: 8px;
+            background-color: #f1f5f9;
+            border: 1px solid #e0e7ff;
+        }
+        h2 {
+            color: #1e3a8a;
+            font-weight: 700;
+        }
+        /* Tooltip styling */
+        .tooltip-icon {
+            cursor: pointer;
+            color: #3b82f6;
+            font-size: 0.9rem;
+        }
+        /* Loading spinner */
+        #loading {
+            display: none;
+            text-align: center;
+            margin-top: 20px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h2 class="text-center mb-4">Heart Disease Prediction</h2>
+        <form method="POST" action="/">
+            <div class="mb-3">
+                <label for="age" class="form-label">Age
+                    <span class="tooltip-icon" data-bs-toggle="tooltip" data-bs-placement="top" title="Your age in years">ℹ️</span>
+                </label>
+                <input type="number" class="form-control" id="age" name="age" required>
+            </div>
+            <div class="mb-3">
+                <label for="sex" class="form-label">Sex
+                    <span class="tooltip-icon" data-bs-toggle="tooltip" data-bs-placement="top" title="Your biological sex">ℹ️</span>
+                </label>
+                <select class="form-select" id="sex" name="sex" required>
+                    <option value="M">Male</option>
+                    <option value="F">Female</option>
+                </select>
+            </div>
+            <div class="mb-3">
+                <label for="restingbp" class="form-label">Resting Blood Pressure
+                    <span class="tooltip-icon" data-bs-toggle="tooltip" data-bs-placement="top" title="Blood pressure at rest (mmHg)">ℹ️</span>
+                </label>
+                <input type="number" class="form-control" id="restingbp" name="restingbp" required>
+            </div>
+            <div class="mb-3">
+                <label for="cholesterol" class="form-label">Cholesterol
+                    <span class="tooltip-icon" data-bs-toggle="tooltip" data-bs-placement="top" title="Serum cholesterol (mg/dL)">ℹ️</span>
+                </label>
+                <input type="number" class="form-control" id="cholesterol" name="cholesterol" required>
+            </div>
+            <div class="mb-3">
+                <label for="maxhr" class="form-label">Max Heart Rate
+                    <span class="tooltip-icon" data-bs-toggle="tooltip" data-bs-placement="top" title="Maximum heart rate achieved (bpm)">ℹ️</span>
+                </label>
+                <input type="number" class="form-control" id="maxhr" name="maxhr" required>
+            </div>
+            <div class="mb-3">
+                <label for="oldpeak" class="form-label">Oldpeak
+                    <span class="tooltip-icon" data-bs-toggle="tooltip" data-bs-placement="top" title="ST depression induced by exercise">ℹ️</span>
+                </label>
+                <input type="number" step="0.1" class="form-control" id="oldpeak" name="oldpeak" required>
+            </div>
+            <div class="mb-3">
+                <label for="fastingbs" class="form-label">Fasting Blood Sugar
+                    <span class="tooltip-icon" data-bs-toggle="tooltip" data-bs-placement="top" title="Fasting blood sugar > 120 mg/dL">ℹ️</span>
+                </label>
+                <select class="form-select" id="fastingbs" name="fastingbs" required>
+                    <option value="1">Yes (> 120 mg/dL)</option>
+                    <option value="0">No (≤ 120 mg/dL)</option>
+                </select>
+            </div>
+            <div class="mb-3">
+                <label for="exerciseangina" class="form-label">Exercise Angina
+                    <span class="tooltip-icon" data-bs-toggle="tooltip" data-bs-placement="top" title="Chest pain during exercise">ℹ️</span>
+                </label>
+                <select class="form-select" id="exerciseangina" name="exerciseangina" required>
+                    <option value="1">Yes</option>
+                    <option value="0">No</option>
+                </select>
+            </div>
+            <div class="mb-3">
+                <label for="chestpaintype" class="form-label">Chest Pain Type
+                    <span class="tooltip-icon" data-bs-toggle="tooltip" data-bs-placement="top" title="Type of chest pain experienced">ℹ️</span>
+                </label>
+                <select class="form-select" id="chestpaintype" name="chestpaintype" required>
+                    <option value="ASY">Asymptomatic (ASY)</option>
+                    <option value="NAP">Non-Anginal Pain (NAP)</option>
+                    <option value="ATA">Atypical Angina (ATA)</option>
+                    <option value="TA">Typical Angina (TA)</option>
+                </select>
+            </div>
+            <div class="mb-3">
+                <label for="st_slope" class="form-label">ST Slope
+                    <span class="tooltip-icon" data-bs-toggle="tooltip" data-bs-placement="top" title="Slope of the peak exercise ST segment">ℹ️</span>
+                </label>
+                <select class="form-select" id="st_slope" name="st_slope" required>
+                    <option value="Up">Up</option>
+                    <option value="Flat">Flat</option>
+                    <option value="Down">Down</option>
+                </select>
+            </div>
+            <div class="mb-3">
+                <label for="restingecg" class="form-label">Resting ECG
+                    <span class="tooltip-icon" data-bs-toggle="tooltip" data-bs-placement="top" title="Resting electrocardiogram results">ℹ️</span>
+                </label>
+                <select class="form-select" id="restingecg" name="restingecg" required>
+                    <option value="Normal">Normal</option>
+                    <option value="LVH">Left Ventricular Hypertrophy (LVH)</option>
+                    <option value="ST">ST-T Wave Abnormality (ST)</option>
+                </select>
+            </div>
+            <button type="submit" class="btn btn-primary">Predict</button>
+        </form>
+        <div id="loading" class="text-center">
+            <div class="spinner-border text-primary" role="status">
+                <span class="visually-hidden">Loading...</span>
+            </div>
+        </div>
+        {% if result %}
+        <div class="result-box">
+            <h5 class="text-center">Prediction Result</h5>
+            <p>{{ result }}</p>
+        </div>
+        {% endif %}
+    </div>
+    <!-- Bootstrap JS and Popper.js -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        // Enable tooltips
+        var tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'));
+        var tooltipList = tooltipTriggerList.map(function (tooltipTriggerEl) {
+            return new bootstrap.Tooltip(tooltipTriggerEl);
+        });
+        // Show loading spinner on form submit
+        document.querySelector('form').addEventListener('submit', function() {
+            document.getElementById('loading').style.display = 'block';
+        });
+    </script>
+</body>
+</html>
