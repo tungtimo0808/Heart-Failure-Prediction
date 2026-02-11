@@ -21,7 +21,13 @@ The web app lets users input health indicators (age, sex, BP, cholesterol, ECG r
 
 ## Project Structure
 Typical structure in this repository:
-
+.
+├── source_code/ # notebooks / scripts
+├── Fig EDA/figures/ # EDA charts
+├── Fig Model/ # model figures (SHAP, permutation importance, etc.)
+├── Final Report.pdf
+├── Heart Disease Presentation.pdf
+└── (app files: app.py, templates/index.html, model .pkl) # if included
 
 ---
 
